@@ -37,9 +37,13 @@ pipeline {
 
         stage('Sonar Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    dir('backend') {
-                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url=http://34.110.159.100 -Dsonar.token=${SONARQUBE_TOKEN}"
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                    script {
+                        withSonarQubeEnv('SonarQube') {
+                            dir('backend') {
+                                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url='http://34.110.159.100' -Dsonar.token='${SONARQUBE_TOKEN}'"
+                            }
+                        }
                     }
                 }
             }
