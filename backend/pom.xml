@@ -9,7 +9,7 @@
     <packaging>jar</packaging> <!-- Packaging type is set to JAR -->
 
     <properties>
-        <java.version>11</java.version> <!-- Set Java version to 11 -->
+        <java.version>17</java.version> <!-- Set Java version to 17 -->
         <maven.compiler.source>${java.version}</maven.compiler.source> <!-- Java source compatibility -->
         <maven.compiler.target>${java.version}</maven.compiler.target> <!-- Java target compatibility -->
         <maven.compiler.release>${java.version}</maven.compiler.release> <!-- Compiler release version -->
