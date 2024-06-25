@@ -21,7 +21,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    checkout([$class: 'GitSCM', branches: [[name: "*/tags/\${tag}"]], userRemoteConfigs: [[url: 'https://github.com/vaidyabhishek/cicd', credentialsId: 'git-credentials']]])
+                    checkout([$class: 'GitSCM', branches: [[name: "master"]], userRemoteConfigs: [[url: 'https://github.com/vaidyabhishek/cicd', credentialsId: 'git-credentials']]])
                 }
             }
         }
