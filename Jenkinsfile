@@ -100,6 +100,7 @@ pipeline {
                     dir('k8s') {
                         sh "sed -i 's/latest/${BUILD_NUMBER}/g' backend.yaml"
                         sh "sed -i 's/latest/${BUILD_NUMBER}/g' frontend.yaml"
+                        sh 'kubectl create ns dev'
                         sh 'kubectl apply -f db-secret.yaml'
                         sh 'kubectl apply -f mysql-db.yaml'
                         sh 'kubectl apply -f backend.yaml'
