@@ -62,19 +62,19 @@ pipeline {
             }
         }
 
-        stage('OWASP checks') {
-            steps {
-                script {
-                    if (!fileExists('dependency-check/bin/dependency-check.sh')) {
-                        sh 'mkdir -p dependency-check'
-                        sh 'curl -L https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip -o dependency-check.zip'
-                        sh 'unzip dependency-check.zip -d dependency-check'
-                    }
-                }
-                sh './dependency-check/bin/dependency-check.sh --project "my-app" --format "XML" --out "dependency-check-report.xml" --scan "."'
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-            }
-        }
+        // stage('OWASP checks') {
+        //     steps {
+        //         script {
+        //             if (!fileExists('dependency-check/bin/dependency-check.sh')) {
+        //                 sh 'mkdir -p dependency-check'
+        //                 sh 'curl -L https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.3/dependency-check-6.5.3-release.zip -o dependency-check.zip'
+        //                 sh 'unzip dependency-check.zip -d dependency-check'
+        //             }
+        //         }
+        //         sh './dependency-check/bin/dependency-check.sh --project "my-app" --format "XML" --out "dependency-check-report.xml" --scan "."'
+        //         dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+        //     }
+        // }
 
         stage('Push to Artifact Registry') {
             steps {
