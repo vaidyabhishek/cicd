@@ -30,20 +30,23 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'npm install'
-                    
+                    // Run your tests here if needed
                 }
             }
         }
 
         stage('SonarQube Analysis') {
-          def mvn = tool 'Default Maven';
-          withSonarQubeEnv() {
-            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd'"
-
-          }
-            
+            steps {
+                script {
+                    def mvnHome = tool name: 'Maven', type: 'maven'
+                    withSonarQubeEnv('SonarQube') {
+                        dir('backend') {
+                            sh "${mvnHome}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd'"
+                        }
+                    }
+                }
+            }
         }
-
 
         stage('Build and Dockerize') {
             steps {
