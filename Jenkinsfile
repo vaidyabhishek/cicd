@@ -21,7 +21,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    checkout scm: [$class: 'GitSCM', branches: [[name: '*/tags/${tag}']], userRemoteConfigs: [[url: 'https://github.com/vaidyabhishek/cicd', credentialsId: 'git-credentials']]]
+                    checkout([$class: 'GitSCM', branches: [[name: "*/tags/\${tag}"]], userRemoteConfigs: [[url: 'https://github.com/vaidyabhishek/cicd', credentialsId: 'git-credentials']]])
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     dir('backend') {
-                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url=http://34.110.159.100 -Dsonar.token=${SONARQUBE_TOKEN}
+                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url=http://34.110.159.100 -Dsonar.token=${SONARQUBE_TOKEN}"
                     }
                 }
             }
@@ -50,10 +50,10 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'mvn clean package'
-                    sh 'docker build -t backend:${BUILD_NUMBER} .'
+                    sh "docker build -t backend:${BUILD_NUMBER} ."
                 }
                 dir('frontend') {
-                    sh 'docker build -t frontend:${BUILD_NUMBER} .'
+                    sh "docker build -t frontend:${BUILD_NUMBER} ."
                 }
             }
         }
@@ -77,7 +77,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'gcp-service-account', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                         sh 'gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS'
-                        sh 'gcloud auth configure-docker ${REGION}-docker.pkg.dev'
+                        sh "gcloud auth configure-docker ${REGION}-docker.pkg.dev"
                         sh "docker tag frontend:${BUILD_NUMBER} ${NODE_APP_IMAGE}"
                         sh "docker tag backend:${BUILD_NUMBER} ${JAVA_APP_IMAGE}"
                         sh "docker push ${NODE_APP_IMAGE}"
@@ -91,7 +91,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'gcp-service-account', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     sh 'gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS'
-                    sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-a --project'macro-market-426811-r6'
+                    sh 'gcloud container clusters get-credentials cluster-1 --region us-central1 --project macro-market-426811-r6'
                     sh 'cd k8s'
                     sh "sed -i 's/latest/${BUILD_NUMBER}/g' backend.yaml"
                     sh "sed -i 's/latest/${BUILD_NUMBER}/g' frontend.yaml"
