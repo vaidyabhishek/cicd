@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gcr.io/your-project-id/frontend:latest
+        image: us-central1-docker.pkg.dev/macro-market-426811-r6/cicd/frontend:latest
         ports:
         - containerPort: 3000
 ---
