@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: gcr.io/your-project-id/backend:latest
+        image: us-central1-docker.pkg.dev/macro-market-426811-r6/cicd/backend::latest
         ports:
         - containerPort: 8001
         env:
