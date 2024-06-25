@@ -72,7 +72,8 @@ pipeline {
         //             }
         //         }
         //         sh './dependency-check/bin/dependency-check.sh --project "my-app" --format "XML" --out "dependency-check-report.xml" --scan "."'
-        //         dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+        //         // Assuming dependencyCheckPublisher is correctly configured
+        //         // dependencyCheckPublisher pattern: 'dependency-check-report.xml'
         //     }
         // }
 
@@ -96,23 +97,22 @@ pipeline {
                 withCredentials([file(credentialsId: 'gcp-service-account', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     sh 'gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS'
                     sh 'gcloud container clusters get-credentials cluster-1 --region us-central1 --project macro-market-426811-r6'
-                    sh 'cd k8s'
-                    sh 'pwd'
-                    sh 'ls -la k8s'
-                    sh "sed -i 's/latest/${BUILD_NUMBER}/g' backend.yaml"
-                    sh "sed -i 's/latest/${BUILD_NUMBER}/g' frontend.yaml"
-                    sh 'kubectl apply -f db-secret.yaml'
-                    sh 'kubectl apply -f mysql-db.yaml'
-                    sh 'kubectl apply -f backend.yaml'
-                    sh 'kubectl apply -f frontend.yaml'
+                    dir('k8s') {
+                        sh "sed -i 's/latest/${BUILD_NUMBER}/g' backend.yaml"
+                        sh "sed -i 's/latest/${BUILD_NUMBER}/g' frontend.yaml"
+                        sh 'kubectl apply -f db-secret.yaml'
+                        sh 'kubectl apply -f mysql-db.yaml'
+                        sh 'kubectl apply -f backend.yaml'
+                        sh 'kubectl apply -f frontend.yaml'
+                    }
                 }
             }
         }
     }
 
-   // post {
-   //     always {
-   //         cleanWs()
-   //     }
-   // }
+    post {
+        always {
+            cleanWs()
+        }
+    }
 }
