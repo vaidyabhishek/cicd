@@ -105,6 +105,7 @@ pipeline {
                         sh 'kubectl apply -f mysql-db.yaml'
                         sh 'kubectl apply -f backend.yaml'
                         sh 'kubectl apply -f frontend.yaml'
+                        sh 'kubectl apply -f ingress.yaml'
                     }
                 }
             }
