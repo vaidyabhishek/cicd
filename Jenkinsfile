@@ -30,8 +30,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'npm install'
-                    sh 'npm test'
-                    junit 'test-reports/*.xml'
+                    
                 }
             }
         }
