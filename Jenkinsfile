@@ -35,19 +35,15 @@ pipeline {
             }
         }
 
-        stage('Sonar Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
-                    script {
-                        withSonarQubeEnv('SonarQube') {
-                            dir('backend') {
-                                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url='http://34.110.159.100' -Dsonar.token='${SONARQUBE_TOKEN}'"
-                            }
-                        }
-                    }
-                }
-            }
+        stage('SonarQube Analysis') {
+          def mvn = tool 'Default Maven';
+          withSonarQubeEnv() {
+            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd'"
+
+          }
+            
         }
+
 
         stage('Build and Dockerize') {
             steps {
