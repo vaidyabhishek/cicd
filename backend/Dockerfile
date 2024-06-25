@@ -1,5 +1,5 @@
 # Dockerfile for Java Application
-FROM openjdk:11-jre-slim
+FROM adoptopenjdk/openjdk17:alpine-jre
 
 COPY target/backend-1.0-SNAPSHOT.jar /usr/app/app.jar
 
